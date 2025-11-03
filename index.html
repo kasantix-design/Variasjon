@@ -1,15 +1,94 @@
-<!doctype html><html lang="no"><head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>VARIASJON</title>
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>VARIASJON – Tidsskrift for nevrovarierte</title>
   <link rel="stylesheet" href="style.css">
-</head><body>
+  <style>
+    /* Layout for forsiden */
+    .grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 32px;
+    }
+    @media (max-width: 800px){
+      .grid { grid-template-columns: 1fr; }
+    }
+    .nyheter article {
+      margin-bottom: 24px;
+      padding: 12px 16px;
+      border-left: 4px solid var(--oker);
+      background: var(--bg);
+    }
+    .nyheter h2, .arkiv h2 {
+      color: var(--accent-dark);
+      border-bottom: 2px solid var(--oker);
+      padding-bottom: 4px;
+    }
+    .arkiv ul {
+      list-style:none;
+      padding:0;
+      margin:0;
+    }
+    .arkiv li {
+      margin: 12px 0;
+      border-left: 4px solid var(--oker);
+      padding-left: 10px;
+    }
+    .arkiv a { text-decoration:none; color:var(--accent-dark); font-weight:bold; }
+    .arkiv a:hover { text-decoration:underline; }
+  </style>
+</head>
+
+<body>
   <div class="wrapper">
+
+    <!-- Header -->
     <div class="header">
       <div class="header__title">VARIASJON</div>
-      <div class="header__tagline">Tidsskrift for nevrovarierte</div>
+      <div class="header__tagline">Tidsskrift for nevrovariasjon</div>
     </div>
     <hr class="header__rule">
-    <p>På denne siden kommer det snart ett tidsskrift for alle som tenker og er variert. LaTeX-filen <code>variasjon.tex</code> ligger i repoet.
-    Neste steg kommer snart <code>variasjon.html</code>.</p>
+
+    <!-- To kolonner -->
+    <div class="grid">
+      <!-- Venstre: nyheter -->
+      <section class="nyheter">
+        <h2>Siste nyheter</h2>
+
+        <article>
+          <h3>Ny studie: arbeidsminne og oppgave-design</h3>
+          <p>Kort sammendrag (2–3 linjer). Praktisk betydning for voksne med AuDHD i arbeid.</p>
+          <p><a href="#">Les mer →</a></p>
+        </article>
+
+        <article>
+          <h3>Sensorisk ergonomi: 4000K-lys reduserer stress</h3>
+          <p>Resultater fra feltstudie og sjekkliste for kontor.</p>
+          <p><a href="#">Les mer →</a></p>
+        </article>
+
+        <article>
+          <h3>NAV-møte uten overload: sjekkliste</h3>
+          <p>Konkrete setninger og struktur før/under/etter møtet. Gratis PDF.</p>
+          <p><a href="#">Les mer →</a></p>
+        </article>
+
+      </section>
+
+      <!-- Høyre: arkiv/numre -->
+      <aside class="arkiv">
+        <h2>Numre</h2>
+        <ul>
+          <li><a href="variasjon01.html">Nr. 01 – Sanseregulering og arbeid</a></li>
+          <li><a href="#">Nr. 02 – Arbeidsminne og struktur</a></li>
+          <li><a href="#">Nr. 03 – Sosial energi og pauser</a></li>
+          <li><a href="#">Nr. 04 – NAV-tilrettelegging i praksis</a></li>
+        </ul>
+      </aside>
+    </div>
+
   </div>
-</body></html>
+</body>
+</html>
