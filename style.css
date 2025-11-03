@@ -1,0 +1,13 @@
+:root{
+  --text:#222; --accent-dark:#21343D; --oker:#DAA520; --bg:#fff; --maxw:980px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.55 "Helvetica Neue",Arial,sans-serif}
+.wrapper{max-width:var(--maxw);margin:40px auto;padding:0 24px}
+.header{display:flex;gap:16px;align-items:flex-end;justify-content:space-between;margin:0 0 10px 0}
+.header__title{font-weight:800;color:var(--accent-dark);font-size:clamp(40px,7vw,60px);line-height:.95;letter-spacing:.02em}
+.header__tagline{color:var(--accent-dark);font-size:clamp(14px,2.4vw,20px);white-space:nowrap}
+.header__rule{height:6px;background:var(--oker);border:0;margin:8px 0 24px 0}
+h1,h2,h3{color:var(--accent-dark);margin:1.2em 0 .4em}
+h1{font-size:1.75rem} h2{font-size:1.35rem} h3{font-size:1.1rem}
+a{color:var(--accent-dark);text-decoration:underline}
