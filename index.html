@@ -1,94 +1,52 @@
-<!doctype html>
-<html lang="no">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>VARIASJON – Tidsskrift for nevrovarierte</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    /* Layout for forsiden */
-    .grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 32px;
-    }
-    @media (max-width: 800px){
-      .grid { grid-template-columns: 1fr; }
-    }
-    .nyheter article {
-      margin-bottom: 24px;
-      padding: 12px 16px;
-      border-left: 4px solid var(--oker);
-      background: var(--bg);
-    }
-    .nyheter h2, .arkiv h2 {
-      color: var(--accent-dark);
-      border-bottom: 2px solid var(--oker);
-      padding-bottom: 4px;
-    }
-    .arkiv ul {
-      list-style:none;
-      padding:0;
-      margin:0;
-    }
-    .arkiv li {
-      margin: 12px 0;
-      border-left: 4px solid var(--oker);
-      padding-left: 10px;
-    }
-    .arkiv a { text-decoration:none; color:var(--accent-dark); font-weight:bold; }
-    .arkiv a:hover { text-decoration:underline; }
-  </style>
-</head>
+<style>
+  /* Trygg, konservativ CSS – ingen clamp(), enkel @media */
+  :root{
+    --text:#222222;
+    --accent-dark:#21343D;
+    --oker:#DAA520;
+    --bg:#ffffff;
+    --maxw:980px;
+  }
+  *{box-sizing:border-box}
+  html,body{
+    margin:0; padding:0;
+    background:var(--bg); color:var(--text);
+    font:16px/1.55 Arial, Helvetica, sans-serif;
+  }
+  .wrapper{max-width:var(--maxw); margin:40px auto; padding:0 24px;}
 
-<body>
-  <div class="wrapper">
+  /* Header */
+  .header{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    margin:0 0 10px 0;
+  }
+  .header__title{
+    font-weight:800; color:var(--accent-dark);
+    font-size:56px; line-height:0.95; letter-spacing:0.02em;
+  }
+  .header__tagline{
+    color:var(--accent-dark); font-size:18px; white-space:nowrap;
+  }
+  .header__rule{height:6px; background:var(--oker); border:0; margin:8px 0 24px 0;}
 
-    <!-- Header -->
-    <div class="header">
-      <div class="header__title">VARIASJON</div>
-      <div class="header__tagline">Tidsskrift for nevrovarierte</div>
-    </div>
-    <hr class="header__rule">
+  /* To kolonner */
+  .grid{display:grid; grid-template-columns:2fr 1fr; gap:32px;}
+  @media screen and (max-width:800px){
+    .grid{grid-template-columns:1fr;}
+    .header__title{font-size:40px;}
+    .header__tagline{font-size:16px;}
+  }
 
-    <!-- To kolonner -->
-    <div class="grid">
-      <!-- Venstre: nyheter -->
-      <section class="nyheter">
-        <h2>Siste nyheter</h2>
-
-        <article>
-          <h3>Ny studie: autisme</h3>
-          <p>Kort sammendrag (2–3 linjer). Praktisk betydning for voksne med AuDHD i arbeid.</p>
-          <p><a href="#">Les mer →</a></p>
-        </article>
-
-        <article>
-          <h3>Sensorisk ergonomi: 4000K-lys reduserer stress</h3>
-          <p>Resultater fra feltstudie og sjekkliste for kontor.</p>
-          <p><a href="#">Les mer →</a></p>
-        </article>
-
-        <article>
-          <h3>NAV-møte uten overload: sjekkliste</h3>
-          <p>Konkrete setninger og struktur før/under/etter møtet. Gratis PDF.</p>
-          <p><a href="#">Les mer →</a></p>
-        </article>
-
-      </section>
-
-      <!-- Høyre: arkiv/numre -->
-      <aside class="arkiv">
-        <h2>Numre</h2>
-        <ul>
-          <li><a href="variasjon01.html">Nr. 01 – Sanseregulering og arbeid</a></li>
-          <li><a href="#">Nr. 02 – Arbeidsminne og struktur</a></li>
-          <li><a href="#">Nr. 03 – Sosial energi og pauser</a></li>
-          <li><a href="#">Nr. 04 – NAV-tilrettelegging i praksis</a></li>
-        </ul>
-      </aside>
-    </div>
-
-  </div>
-</body>
-</html>
+  /* Nyheter og arkiv */
+  .nyheter article{
+    margin-bottom:24px; padding:12px 16px;
+    border-left:4px solid var(--oker); background:var(--bg);
+  }
+  .nyheter h2, .arkiv h2{
+    color:var(--accent-dark); border-bottom:2px solid var(--oker); padding-bottom:4px;
+  }
+  .arkiv ul{list-style:none; padding:0; margin:0;}
+  .arkiv li{margin:12px 0; border-left:4px solid var(--oker); padding-left:10px;}
+  .arkiv a{text-decoration:none; color:var(--accent-dark); font-weight:bold;}
+  .arkiv a:hover{text-decoration:underline;}
+</style>
