@@ -1,13 +1,70 @@
 :root{
-  --text:#222; --accent-dark:#21343D; --oker:#DAA520; --bg:#fff; --maxw:980px;
+--oker:#f6e7b2; /* lys oker bakgrunn for innholdsfelt */
+--link:#0b6b6b; /* lenkefarge */
+--muted:#666666;
+--maxw:1100px;
 }
+
+
+/* ====== BASE ====== */
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.55 "Helvetica Neue",Arial,sans-serif}
-.wrapper{max-width:var(--maxw);margin:40px auto;padding:0 24px}
-.header{display:flex;gap:16px;align-items:flex-end;justify-content:space-between;margin:0 0 10px 0}
-.header__title{font-weight:800;color:var(--accent-dark);font-size:clamp(40px,7vw,60px);line-height:.95;letter-spacing:.02em}
-.header__tagline{color:var(--accent-dark);font-size:clamp(14px,2.4vw,20px);white-space:nowrap}
-.header__rule{height:6px;background:var(--oker);border:0;margin:8px 0 24px 0}
-h1,h2,h3{color:var(--accent-dark);margin:1.2em 0 .4em}
-h1{font-size:1.75rem} h2{font-size:1.35rem} h3{font-size:1.1rem}
-a{color:var(--accent-dark);text-decoration:underline}
+html,body{margin:0;padding:0}
+body{font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--ink); background:var(--paper)}
+a{color:var(--link)}
+
+
+.container{max-width:var(--maxw); margin:0 auto; padding:0 clamp(16px,3vw,32px)}
+
+
+/* ====== HEADER (sort tekst på hvit bakgrunn) ====== */
+header.site-header{background:var(--paper); color:var(--ink);}
+.mast{display:flex; align-items:flex-end; justify-content:space-between; gap:24px; padding:24px 0}
+.logo{margin:0; font-size:clamp(40px,8vw,96px); font-weight:900; letter-spacing:.06em}
+.subtitle{margin:0; line-height:1.15; text-transform:uppercase; font-weight:800}
+.subtitle .line{display:block; font-size:clamp(14px,2.2vw,22px); letter-spacing:.06em}
+
+
+/* Gul aksentstripe rett under tittelfeltet */
+.accent-bar{height:12px; background:var(--accent)}
+
+
+/* ====== NAVIGASJON (knapper) ====== */
+nav.tabs{background:#fff; border-bottom:1px solid #eee}
+.tabs .row{display:flex; gap:12px; flex-wrap:wrap; padding:12px 0}
+.tab{display:inline-block; text-decoration:none; font-weight:700; padding:10px 14px; border-radius:999px; border:2px solid var(--ink); color:var(--ink);}
+.tab:hover{transform:translateY(-1px)}
+.tab[aria-current="page"]{background:var(--ink); color:#fff}
+
+
+/* ====== INNHOLDSFELT (lys oker bakgrunn) ====== */
+.page-wrap{background:var(--oker)}
+main.container{padding-top:24px; padding-bottom:40px}
+
+
+/* Avis-aktig to-spalte grid */
+.grid{display:grid; gap:24px; grid-template-columns:1fr}
+@media (min-width: 900px){ .grid-news{grid-template-columns: 2fr 1fr} }
+
+
+.article, .sidebar{background:#fff; border-radius:16px; border:1px solid #eee}
+.article .pad, .sidebar .pad{padding:18px}
+.article h2{margin:0 0 8px; font-size:clamp(22px,3vw,28px)}
+.lead{color:var(--muted); margin:0 0 14px}
+.byline{font-size:14px; color:var(--muted); margin-bottom:10px}
+.article .body{column-width: 38ch; column-gap:2.2rem}
+.pull{background:#f3f7f7; border-left:6px solid #cfe7e7; padding:10px 12px; margin:12px 0; font-weight:600}
+
+
+.sidebar h3{margin:0 0 8px}
+.list{list-style:none; padding:0; margin:0}
+.list li{padding:8px 0; border-bottom:1px dashed #eee}
+.list li:last-child{border-bottom:0}
+
+
+footer.site-footer{border-top:1px solid #eee; background:#fff}
+footer .foot{padding:16px 0; color:#444}
+
+
+/* Verktøyklasser */
+.center{display:grid; place-items:center}
+.hidden{display:none}
