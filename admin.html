@@ -61,6 +61,9 @@
   document.addEventListener("DOMContentLoaded", function(){
     if (!window.netlifyIdentity) return;
 
+    // start Identity-widgeten umiddelbart
+    window.netlifyIdentity.init();
+
     // --- håndter invitasjonslenke ---
     if (window.location.hash.includes("invite_token")) {
       window.netlifyIdentity.on("init", user => {
@@ -120,4 +123,5 @@
   </script>
 </body>
 </html>
+
 
