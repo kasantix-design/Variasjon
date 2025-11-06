@@ -6,7 +6,6 @@ function cors(json) {
     statusCode: 200,
     headers: {
       'content-type': 'application/json',
-      // Bytt origin her til din GitHub Pages URL:
       'access-control-allow-origin': 'https://kasantix-design.github.io',
       'access-control-allow-headers': 'content-type',
       'access-control-allow-methods': 'POST, OPTIONS'
