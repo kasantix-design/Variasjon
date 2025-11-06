@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Administrasjon – Variasjon</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    body{font-family:system-ui,sans-serif;margin:2rem;background:#eef4ff;}
+    .container{max-width:600px;margin:auto;background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.05);}
+    button{margin:.5rem 0;padding:.6rem 1rem;font-weight:600;border-radius:8px;border:none;background:#3c74c9;color:#fff;cursor:pointer}
+    button:hover{filter:brightness(.95)}
+    .hidden{display:none}
+    input,textarea{width:100%;margin-top:.4rem;padding:.5rem;border:1px solid #ccc;border-radius:6px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Administrasjon</h1>
+    <p>Logg inn for å lage videomøte og sende e-post.</p>
+
+    <!-- LOGIN BUTTON -->
+    <div id="login-area">
+      <button onclick="netlifyIdentity.open()">Logg inn med Netlify Identity</button>
+    </div>
+
+    <!-- ADMIN AREA -->
+    <div id="admin-area" class="hidden">
+      <h2>Videomøter</h2>
+      <button id="new-meeting">Opprett ny møte-lenke</button>
+      <p id="meeting-result"></p>
+
+      <hr />
+
+      <h2>Send e-post</h2>
+      <form id="mail-form">
+        <label>Til:</label>
+        <input type="email" id="to" required />
+        <label>Emne:</label>
+        <input type="text" id="subject" required />
+        <label>Melding:</label>
+        <textarea id="message" rows="5" required></textarea>
+        <button type="submit">Send</button>
+        <p id="mail-result"></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Netlify Identity control
+    netlifyIdentity.on('login', user=>{
+      document.getElementById('login-area').classList.add('hidden');
+      document.getElementById('admin-area').classList.remove('hidden');
+      netlifyIdentity.close();
+    });
+    netlifyIdentity.on('logout', ()=>{
+      document.getElementById('admin-area').classList.add('hidden');
+      document.getElementById('login-area').classList.remove('hidden');
+    });
+
+    // Videomøteknapp
+    document.getElementById('new-meeting')?.addEventListener('click', async ()=>{
+      const res = await fetch('/.netlify/functions/lk-token?room=coaching',{
+        method:'POST',headers:{'content-type':'application/json'}
+      });
+      const data = await res.json();
+      document.getElementById('meeting-result').textContent =
+        res.ok ? `Møte-lenke: ${window.location.origin}/join.html?room=${data.room}` :
+        'Feil ved oppretting av møte.';
+    });
+
+    // E-post (dummy foreløpig – kobles senere til egen funksjon)
+    document.getElementById('mail-form')?.addEventListener('submit',e=>{
+      e.preventDefault();
+      document.getElementById('mail-result').textContent =
+        'E-post-funksjon kobles til senere via Netlify Functions.';
+    });
+  </script>
+</body>
+</html>
