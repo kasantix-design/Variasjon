@@ -82,11 +82,11 @@ nav.tabs{
   color:#fff;
 }
 
-/* ====== GUL/AKSENT STREK – nå UNDER knappene ====== */
+/* ====== AKSENT STREK – under knappene ====== */
 .accent-bar{
   height:12px;
   background:var(--accent);
-  margin-top:-1px; /* tettere oppunder nav */
+  margin-top:-1px;
 }
 
 /* ====== INNHOLDSFELT (lys bakgrunn pr. tema) ====== */
@@ -118,7 +118,7 @@ footer .foot{padding:16px 0; color:#444}
 .center{display:grid; place-items:center}
 .hidden{display:none}
 
-/* ====== Coach-seksjon CSS (brukes i coaching.html, evt. om.html) ====== */
+/* ====== Coach/portrett seksjon ====== */
 .coach-hero{display:grid; gap:16px; align-items:start}
 .coach-photo{margin:0}
 .coach-photo img{width:220px; height:220px; object-fit:cover; border-radius:16px; border:2px solid #fff; box-shadow:0 4px 20px rgba(0,0,0,.06)}
@@ -133,3 +133,4 @@ footer .foot{padding:16px 0; color:#444}
 .btn{display:inline-block; padding:10px 16px; border-radius:12px; text-decoration:none; border:2px solid var(--ink); color:var(--ink)}
 .btn.solid{background:var(--ink); color:#fff}
 .btn.solid:hover{opacity:.95}
+
