@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="no">
+<html lang="no" class="theme-blue">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css" />
   <meta name="robots" content="noindex" />
 </head>
-<body class="theme-coaching">
+<body class="theme-blue">
   <header class="site-header">
     <div class="container mast" role="banner">
       <h1 class="logo">VARIASJON</h1>
@@ -17,8 +17,9 @@
         <span class="line">nevrovarierte</span>
       </p>
     </div>
+
+    <!-- Ikke i menyen før du vil publisere -->
     <div class="accent-bar" aria-hidden="true"></div>
-    <!-- Ikke i meny ennå -->
   </header>
 
   <div class="page-wrap">
@@ -30,15 +31,17 @@
 
           <div class="coach-hero">
             <figure class="coach-photo">
-              <!-- % HER SKAL BILDET INN: Legg bildet i repoet på main i mappen /assets/ og bytt filnavn under om nødvendig. -->
+              <!-- % HER SKAL BILDET INN: Legg bildet i repoet (main) i mappen /assets/ og bytt filnavn under ved behov. -->
               <img src="assets/reidun.jpg" alt="Portrett av coach" />
               <figcaption>Reidun Sandvik</figcaption>
             </figure>
 
             <div class="coach-cta">
               <a class="btn solid" href="mailto:kontakt@example.org">Send e-post</a>
-              <a class="btn solid" href="sms:+4790000000">Send SMS</a>
-              <a class="btn solid" href="tel:+4790000000">Ring</a>
+              <a class="btn solid" href="sms:+4741646966">Send SMS</a>
+              <a class="btn solid" href="tel:+4741646966">Ring</a>
+              <!-- Ny: Videomøte-knapp peker til /videomote (funksjon/redirect) -->
+              <a class="btn solid" href="/videomote">Videomøte</a>
             </div>
           </div>
 
@@ -50,31 +53,8 @@
               <li>Oppfølgingsnotat + mikrooppgaver</li>
               <li>E-poststøtte mellom timene</li>
             </ul>
-
-            <h3>Slik booker du</h3>
-            <p>Send e-post eller SMS, så får du en unik møtelenke for hvert møte. Du kan også be om et «fast rom» som alltid er det samme.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="article" style="max-width:1000px; margin:16px auto 0">
-        <div class="pad">
-          <h2>Videomøter (LiveKit)</h2>
-          <div class="body" style="column-width:48ch">
-            <p><strong>Sikre møter:</strong> bare de med lenken får adgang. Du kan velge <em>engangsrom</em> (ny lenke hver gang) eller <em>fast rom</em> (samme lenke). Transkribering i sanntid kan slås på etter samtykke.</p>
-          </div>
-
-          <!-- Enkel LiveKit-klient på siden -->
-          <div class="lk-ui">
-            <div class="lk-controls">
-              <label>Romnavn: <input id="roomName" value="coaching" /></label>
-              <button id="btnCreate">Opprett engangsrom</button>
-              <button id="btnJoinFixed">Bli med i fast rom</button>
-              <button id="btnLeave" disabled>Avslutt</button>
-            </div>
-
-            <div id="lk-container" class="lk-stage" aria-live="polite"></div>
-            <p class="muted">Merk: Du trenger en liten serverless-funksjon som utsteder tilgangstoken (kode under). Frontenden her kaller den automatisk.</p>
+            <h3>Praktisk</h3>
+            <p>Til hver time får du en privat møtelenke. Ønsker du fast lenke, si ifra.</p>
           </div>
         </div>
       </section>
@@ -82,74 +62,6 @@
   </div>
 
   <footer class="site-footer"><div class="container foot"><small>© 2025 Variasjon</small></div></footer>
-
-  <!-- LiveKit klientkode -->
-  <script type="module">
-    // Import fra CDN (kan byttes til lokal bundler senere)
-    import { connect, createLocalTracks } from 'https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.min.js';
-
-    const els = {
-      container: document.getElementById('lk-container'),
-      btnCreate: document.getElementById('btnCreate'),
-      btnJoinFixed: document.getElementById('btnJoinFixed'),
-      btnLeave: document.getElementById('btnLeave'),
-      roomName: document.getElementById('roomName'),
-    };
-
-    let room;
-
-    function attachTrack(track, participant) {
-      const el = track.attach();
-      el.dataset.participant = participant.identity || 'ukjent';
-      el.style.maxWidth = '100%';
-      el.style.borderRadius = '12px';
-      el.style.margin = '6px 0';
-      els.container.appendChild(el);
-    }
-
-    async function joinWithToken(url, token) {
-      room = await connect(url, token, { adaptiveStream: true, dynacast: true });
-      room.on('trackSubscribed', attachTrack);
-      room.on('trackUnsubscribed', (track) => track.detach());
-
-      // Publiser lokal lyd/video
-      const tracks = await createLocalTracks({ audio: true, video: true });
-      for (const t of tracks) await room.localParticipant.publishTrack(t);
-
-      els.btnLeave.disabled = false;
-    }
-
-    async function requestToken(kind) {
-      // Bytt til din faktiske serverless-funksjon (Netlify/Cloudflare/Azure)
-      // Eksempel Netlify: '/.netlify/functions/token'
-      const name = els.roomName.value.trim() || 'coaching';
-      const qs = kind === 'ephemeral'
-        ? `?mode=ephemeral&room=${encodeURIComponent(name)}`
-        : `?room=${encodeURIComponent(name)}`;
-      const res = await fetch('/.netlify/functions/token' + qs, { method: 'POST' });
-      if (!res.ok) throw new Error('Kunne ikke hente token');
-      return res.json(); // { url, token }
-    }
-
-    els.btnCreate.addEventListener('click', async () => {
-      try {
-        const { url, token } = await requestToken('ephemeral');
-        await joinWithToken(url, token);
-      } catch (err) { alert(err.message); }
-    });
-
-    els.btnJoinFixed.addEventListener('click', async () => {
-      try {
-        const { url, token } = await requestToken('fixed');
-        await joinWithToken(url, token);
-      } catch (err) { alert(err.message); }
-    });
-
-    els.btnLeave.addEventListener('click', async () => {
-      try { await room?.disconnect(); } catch {}
-      els.container.innerHTML = '';
-      els.btnLeave.disabled = true;
-    });
-  </script>
 </body>
 </html>
+
