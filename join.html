@@ -5,31 +5,31 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Videomøte – Variasjon</title>
   <style>
+    * { box-sizing: border-box; }
     body {
       font-family: system-ui, sans-serif;
       margin: 0;
       background: #f0f4ff;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
     }
-    .join-box {
+    .join-box, #room-container {
       background: #fff;
       border-radius: 12px;
       padding: 2rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, .08);
-      text-align: center;
-      max-width: 400px;
-      width: 100%;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+      max-width: 600px;
+      width: 90%;
     }
-    input {
+    input, textarea {
       width: 100%;
       padding: .6rem;
+      margin: .5rem 0;
       border: 1px solid #ccc;
       border-radius: 6px;
-      margin-top: .5rem;
-      margin-bottom: 1rem;
     }
     button {
       padding: .6rem 1.2rem;
@@ -39,22 +39,30 @@
       background: #3c74c9;
       color: #fff;
       cursor: pointer;
+      margin-right: 0.5rem;
+      margin-top: 0.5rem;
     }
     button:hover {
       filter: brightness(.95);
     }
-    #room-container {
-      display: none;
-      flex-direction: column;
-      width: 100%;
-      height: 100%;
-      padding: 1rem;
-    }
     video {
       width: 100%;
-      max-height: 80vh;
       border-radius: 12px;
       background: #000;
+    }
+    #chat-box {
+      margin-top: 1rem;
+      border-top: 1px solid #ccc;
+      padding-top: 1rem;
+    }
+    #chat-messages {
+      max-height: 150px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+      font-size: 14px;
+      background: #f9f9f9;
+      padding: 0.5rem;
+      border-radius: 6px;
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/livekit-client@2.1.0/dist/livekit-client.min.js"></script>
@@ -69,25 +77,40 @@
     <p id="status"></p>
   </div>
 
-  <div id="room-container">
+  <div id="room-container" style="display:none; flex-direction:column;">
     <video id="video-area" autoplay playsinline></video>
-    <button id="leave-btn" style="margin-top:1rem;">Forlat møte</button>
+    <div>
+      <button id="toggle-mic">Mute</button>
+      <button id="leave-btn">Forlat møte</button>
+    </div>
+
+    <div id="chat-box">
+      <h3>Chat</h3>
+      <div id="chat-messages"></div>
+      <input type="text" id="chat-input" placeholder="Skriv en melding..." />
+      <button id="send-chat">Send</button>
+    </div>
   </div>
 
   <script>
-    const { connect, RoomEvent } = window.LivekitClient;
+    const {
+      connect,
+      RoomEvent,
+      ParticipantEvent,
+      RemoteParticipant
+    } = window.LivekitClient;
+
+    let room;
+    let micEnabled = true;
 
     document.getElementById('join-btn').addEventListener('click', async () => {
       const name = document.getElementById('username').value.trim();
-      if (!name) {
-        alert("Skriv inn et navn først.");
-        return;
-      }
+      if (!name) return alert("Skriv inn et navn først.");
 
       const params = new URLSearchParams(window.location.search);
       const token = params.get('token');
       const url = decodeURIComponent(params.get('url') || '');
-      const room = params.get('room') || 'coaching';
+      const roomName = params.get('room') || 'coaching';
 
       if (!token || !url) {
         document.getElementById('status').textContent = "Mangler token eller server-url i lenken.";
@@ -96,27 +119,69 @@
 
       try {
         document.getElementById('status').textContent = "Kobler til...";
-        const roomConnection = await connect(url, token, { name });
+        room = await connect(url, token, { name });
 
+        // Vis rom og start kamera
         document.getElementById('join-box').style.display = "none";
-        const container = document.getElementById('room-container');
-        container.style.display = "flex";
+        document.getElementById('room-container').style.display = "flex";
 
-        // Start lokal video
-        await roomConnection.localParticipant.setCameraEnabled(true);
+        await room.localParticipant.setCameraEnabled(true);
+        await room.localParticipant.setMicrophoneEnabled(true);
 
-        // Vis andres video
-        roomConnection.on(RoomEvent.TrackSubscribed, (_, publication, participant) => {
-          const el = publication.track.attach();
-          const oldEl = document.getElementById('video-area');
-          oldEl.replaceWith(el);
+        // Lokal video
+        const videoEl = document.getElementById('video-area');
+        room.localParticipant.videoTracks.forEach(pub => {
+          const el = pub.track.attach();
+          videoEl.replaceWith(el);
           el.id = "video-area";
         });
 
+        // Mottar andres video
+        room.on(RoomEvent.TrackSubscribed, (track, pub, participant) => {
+          if (track.kind === 'video') {
+            const el = track.attach();
+            const old = document.getElementById('video-area');
+            old.replaceWith(el);
+            el.id = "video-area";
+          }
+        });
+
+        // Chat (dataTrack)
+        room.on(RoomEvent.DataReceived, (payload, participant) => {
+          const msg = new TextDecoder().decode(payload);
+          const chatEl = document.getElementById('chat-messages');
+          const line = document.createElement('div');
+          line.textContent = `${participant.name || "Deltaker"}: ${msg}`;
+          chatEl.appendChild(line);
+          chatEl.scrollTop = chatEl.scrollHeight;
+        });
+
+        // Leave
         document.getElementById('leave-btn').onclick = () => {
-          roomConnection.disconnect();
+          room.disconnect();
           location.href = "/admin.html";
         };
+
+        // Mute
+        document.getElementById('toggle-mic').onclick = () => {
+          micEnabled = !micEnabled;
+          room.localParticipant.setMicrophoneEnabled(micEnabled);
+          document.getElementById('toggle-mic').textContent = micEnabled ? "Mute" : "Unmute";
+        };
+
+        // Chat send
+        document.getElementById('send-chat').onclick = () => {
+          const msg = document.getElementById('chat-input').value.trim();
+          if (!msg) return;
+          room.localParticipant.publishData(msg, LivekitClient.DataPacket_Kind.RELIABLE);
+          const chatEl = document.getElementById('chat-messages');
+          const line = document.createElement('div');
+          line.textContent = `Du: ${msg}`;
+          chatEl.appendChild(line);
+          chatEl.scrollTop = chatEl.scrollHeight;
+          document.getElementById('chat-input').value = '';
+        };
+
       } catch (err) {
         document.getElementById('status').textContent = "Kunne ikke koble til: " + err.message;
       }
@@ -124,3 +189,4 @@
   </script>
 </body>
 </html>
+
