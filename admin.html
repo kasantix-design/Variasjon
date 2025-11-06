@@ -6,6 +6,17 @@
   <title>Administrasjon – Variasjon</title>
   <link rel="stylesheet" href="style.css" />
   <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script>
+  if (window.netlifyIdentity) {
+    // Sørg for at brukeren sendes tilbake hit etter innlogging
+    window.netlifyIdentity.on("login", user => {
+      window.location.href = "/admin.html";
+    });
+    window.netlifyIdentity.on("logout", () => {
+      window.location.href = "/admin.html";
+    });
+  }
+</script>
   <style>
     body{font-family:system-ui,sans-serif;margin:2rem;background:#eef4ff;}
     .container{max-width:600px;margin:auto;background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.05);}
