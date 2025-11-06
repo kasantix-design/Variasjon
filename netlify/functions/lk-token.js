@@ -24,7 +24,8 @@ export async function handler(event) {
     return { statusCode: 500, body: 'Missing LiveKit env' };
   }
 
-  const params = new URLSearchParams(event.queryStringParameters || {});
+  
+  const room = JSON.parse(event.body || '{}').room || 'coaching';
   const room = (params.get('room') || 'coaching').replace(/[^a-zA-Z0-9_-]/g,'');
 
   const at = new AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET, {
