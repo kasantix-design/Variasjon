@@ -1,50 +1,101 @@
+/* ============= style.css ============= */
+
+/* ====== DESIGNVARIABLER (basis) ====== */
 :root{
---oker:#f6e7b2; /* lys oker bakgrunn for innholdsfelt */
---link:#0b6b6b; /* lenkefarge */
---muted:#666666;
---maxw:1100px;
+  --ink:#0a0a0a;       /* tekst, rammer, knapper */
+  --paper:#ffffff;     /* hvit header */
+  --link:#0b6b6b;      /* lenkefarge */
+  --muted:#666666;
+  --maxw:1100px;
+
+  /* Standard/oker som default */
+  --accent:#ffd54d;    /* stripe/aksent (mellomfarge) */
+  --bg-soft:#f6e7b2;   /* veldig lys bakgrunn i innholdsfeltet */
 }
 
+/* ====== TEMAOVERRIDER ====== */
+/* Blå (om + coaching) */
+.theme-blue {
+  --accent:#3c74c9;
+  --bg-soft:#eaf3ff;
+}
+/* Rosa (kontakt) */
+.theme-pink {
+  --accent:#d9568c;
+  --bg-soft:#ffeaf2;
+}
+/* Grønn (podcaster) */
+.theme-green {
+  --accent:#2ba86a;
+  --bg-soft:#eafaf1;
+}
 
 /* ====== BASE ====== */
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
-body{font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--ink); background:var(--paper)}
+body{
+  font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--ink); background:var(--paper)
+}
 a{color:var(--link)}
-
-
 .container{max-width:var(--maxw); margin:0 auto; padding:0 clamp(16px,3vw,32px)}
 
-
-/* ====== HEADER (sort tekst på hvit bakgrunn) ====== */
+/* ====== HEADER ====== */
 header.site-header{background:var(--paper); color:var(--ink);}
 .mast{display:flex; align-items:flex-end; justify-content:space-between; gap:24px; padding:24px 0}
 .logo{margin:0; font-size:clamp(40px,8vw,96px); font-weight:900; letter-spacing:.06em}
 .subtitle{margin:0; line-height:1.15; text-transform:uppercase; font-weight:800}
 .subtitle .line{display:block; font-size:clamp(14px,2.2vw,22px); letter-spacing:.06em}
 
-
-/* Gul aksentstripe rett under tittelfeltet */
-.accent-bar{height:12px; background:var(--accent)}
-
-
 /* ====== NAVIGASJON (knapper) ====== */
-nav.tabs{background:#fff; border-bottom:1px solid #eee}
-.tabs .row{display:flex; gap:12px; flex-wrap:wrap; padding:12px 0}
-.tab{display:inline-block; text-decoration:none; font-weight:700; padding:10px 14px; border-radius:999px; border:2px solid var(--ink); color:var(--ink);}
-.tab:hover{transform:translateY(-1px)}
-.tab[aria-current="page"]{background:var(--ink); color:#fff}
+nav.tabs{
+  background:#fff;
+  border-bottom:1px solid #eee;
+  position:relative;
+  z-index:5;
+}
+.tabs .row{
+  display:flex; gap:12px; flex-wrap:wrap; padding:12px 0;
+}
 
+/* Knapper – animert overgang ved hover/fokus/trykk */
+.tab{
+  display:inline-block;
+  text-decoration:none;
+  font-weight:700;
+  padding:10px 14px;
+  border-radius:999px;
+  border:2px solid var(--ink);
+  color:var(--ink);
+  transition:background .15s ease, color .15s ease, transform .1s ease;
+}
+.tab:hover,
+.tab:focus,
+.tab:active{
+  background:var(--ink);
+  color:#fff;
+  transform:translateY(-1px);
+}
+/* Aktiv side beholdes markert */
+.tab[aria-current="page"]{
+  background:var(--ink);
+  color:#fff;
+}
 
-/* ====== INNHOLDSFELT (lys oker bakgrunn) ====== */
-.page-wrap{background:var(--oker)}
+/* ====== GUL/AKSENT STREK – nå UNDER knappene ====== */
+.accent-bar{
+  height:12px;
+  background:var(--accent);
+  margin-top:-1px; /* tettere oppunder nav */
+}
+
+/* ====== INNHOLDSFELT (lys bakgrunn pr. tema) ====== */
+.page-wrap{background:var(--bg-soft)}
 main.container{padding-top:24px; padding-bottom:40px}
-
 
 /* Avis-aktig to-spalte grid */
 .grid{display:grid; gap:24px; grid-template-columns:1fr}
 @media (min-width: 900px){ .grid-news{grid-template-columns: 2fr 1fr} }
-
 
 .article, .sidebar{background:#fff; border-radius:16px; border:1px solid #eee}
 .article .pad, .sidebar .pad{padding:18px}
@@ -54,17 +105,31 @@ main.container{padding-top:24px; padding-bottom:40px}
 .article .body{column-width: 38ch; column-gap:2.2rem}
 .pull{background:#f3f7f7; border-left:6px solid #cfe7e7; padding:10px 12px; margin:12px 0; font-weight:600}
 
-
 .sidebar h3{margin:0 0 8px}
 .list{list-style:none; padding:0; margin:0}
 .list li{padding:8px 0; border-bottom:1px dashed #eee}
 .list li:last-child{border-bottom:0}
 
-
+/* Footer */
 footer.site-footer{border-top:1px solid #eee; background:#fff}
 footer .foot{padding:16px 0; color:#444}
-
 
 /* Verktøyklasser */
 .center{display:grid; place-items:center}
 .hidden{display:none}
+
+/* ====== Coach-seksjon CSS (brukes i coaching.html, evt. om.html) ====== */
+.coach-hero{display:grid; gap:16px; align-items:start}
+.coach-photo{margin:0}
+.coach-photo img{width:220px; height:220px; object-fit:cover; border-radius:16px; border:2px solid #fff; box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.coach-photo figcaption{font-weight:700; margin-top:6px}
+.coach-cta{display:flex; gap:10px; flex-wrap:wrap}
+
+@media (min-width: 860px){
+  .coach-hero{grid-template-columns:240px 1fr}
+}
+
+/* ====== Knappestil for primær-CTA ====== */
+.btn{display:inline-block; padding:10px 16px; border-radius:12px; text-decoration:none; border:2px solid var(--ink); color:var(--ink)}
+.btn.solid{background:var(--ink); color:#fff}
+.btn.solid:hover{opacity:.95}
