@@ -1,18 +1,137 @@
-<!doctype html><html lang="no"><head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>VARIASJON</title>
-  <link rel="stylesheet" href="style.css">
-</head><body>
-  <div class="wrapper">
-    <div class="header">
-      <div class="header__title">VARIASJON</div>
-      <div class="header__tagline">Tidsskrift for nevrovarierte</div>
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Variasjon – Tidsskrift for nevrovarierte</title>
+  <meta name="description" content="Variasjon er et tidsskrift for nevrovarierte – forskning, praksis og kuraterte ressurser." />
+  <style>
+    /* ====== DESIGNVARIABLER ====== */
+    :root{
+      --ink:#0a0a0a;             /* sort tekst */
+      --paper:#ffffff;            /* hvit header */
+      --accent:#ffd54d;           /* gul stripe under tittel */
+      --oker:#f6e7b2;             /* lys oker bakgrunn for innholdsfelt */
+      --link:#0b6b6b;             /* lenkefarge */
+      --muted:#666666;
+      --maxw:1100px;
+    }
+
+    /* ====== BASE ====== */
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--ink); background:var(--paper)}
+    a{color:var(--link)}
+
+    .container{max-width:var(--maxw); margin:0 auto; padding:0 clamp(16px,3vw,32px)}
+
+    /* ====== HEADER (sort tekst på hvit bakgrunn) ====== */
+    header.site-header{background:var(--paper); color:var(--ink);}
+    .mast{display:flex; align-items:flex-end; justify-content:space-between; gap:24px; padding:24px 0}
+    .logo{margin:0; font-size:clamp(40px,8vw,96px); font-weight:900; letter-spacing:.06em}
+    .subtitle{margin:0; line-height:1.15; text-transform:uppercase; font-weight:800}
+    .subtitle .line{display:block; font-size:clamp(14px,2.2vw,22px); letter-spacing:.06em}
+
+    /* Gul aksentstripe rett under tittelfeltet */
+    .accent-bar{height:12px; background:var(--accent)}
+
+    /* ====== NAVIGASJON (knapper) ====== */
+    nav.tabs{background:#fff; border-bottom:1px solid #eee}
+    .tabs .row{display:flex; gap:12px; flex-wrap:wrap; padding:12px 0}
+    .tab{display:inline-block; text-decoration:none; font-weight:700; padding:10px 14px; border-radius:999px; border:2px solid var(--ink); color:var(--ink);}
+    .tab:hover{transform:translateY(-1px)}
+    .tab[aria-current="page"]{background:var(--ink); color:#fff}
+
+    /* ====== INNHOLDSFELT (lys oker bakgrunn) ====== */
+    .page-wrap{background:var(--oker)}
+    main.container{padding-top:24px; padding-bottom:40px}
+
+    /* Avis-aktig to-spalte grid */
+    .grid{display:grid; gap:24px; grid-template-columns:1fr}
+    @media (min-width: 900px){ .grid{grid-template-columns: 2fr 1fr} }
+
+    .article, .sidebar{background:#fff; border-radius:16px; border:1px solid #eee}
+    .article .pad, .sidebar .pad{padding:18px}
+    .article h2{margin:0 0 8px; font-size:clamp(22px,3vw,28px)}
+    .lead{color:var(--muted); margin:0 0 14px}
+    .byline{font-size:14px; color:var(--muted); margin-bottom:10px}
+    .article .body{column-width: 38ch; column-gap:2.2rem}
+    .pull{background:#f3f7f7; border-left:6px solid #cfe7e7; padding:10px 12px; margin:12px 0; font-weight:600}
+
+    .sidebar h3{margin:0 0 8px}
+    .list{list-style:none; padding:0; margin:0}
+    .list li{padding:8px 0; border-bottom:1px dashed #eee}
+    .list li:last-child{border-bottom:0}
+
+    footer.site-footer{border-top:1px solid #eee; background:#fff}
+    footer .foot{padding:16px 0; color:#444}
+  </style>
+</head>
+<body>
+  <!-- ====== HEADER ====== -->
+  <header class="site-header">
+    <div class="container mast" role="banner">
+      <h1 class="logo">VARIASJON</h1>
+      <p class="subtitle" aria-label="Undertittel stablet over hverandre">
+        <span class="line">Tidsskrift</span>
+        <span class="line">for</span>
+        <span class="line">nevrovarierte</span>
+      </p>
     </div>
-    <hr class="header__rule">
-    <p>Her vil det snart komme ett tidskrift for nevrovarierte
-      <a href="variasjon.html">Åpne første utgave →</a>
-    <hr class="header__rule">
-    <p>vi har en side 2
-      <a href="variasjon02.html">Åpne side 2 →</a>
+    <div class="accent-bar" aria-hidden="true"></div>
+
+    <!-- ====== TABS ====== -->
+    <nav class="tabs" aria-label="Hovednavigasjon">
+      <div class="container row">
+        <a class="tab" href="index.html" aria-current="page">Hjem</a>
+        <a class="tab" href="utgaver.html">Utgaver</a>
+        <a class="tab" href="om.html">Om</a>
+        <a class="tab" href="kontakt.html">Kontakt</a>
+        <a class="tab" href="podcaster.html">Podcaster</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ====== LYS OKER INNHOLDSFELT ====== -->
+  <div class="page-wrap">
+    <main class="container" role="main">
+      <div class="grid">
+        <!-- HOVEDKOLONNE -->
+        <article class="article">
+          <div class="pad">
+            <h2>Sanseregulering i arbeidshverdagen</h2>
+            <p class="lead">Tema for utgave 01 – kort ingress som forklarer vinklingen.</p>
+            <p class="byline">Av Redaksjonen · Februar 2025</p>
+            <div class="body">
+              <p>Start brødtekst her. Korte avsnitt, tydelige mellomoverskrifter. Denne delen vil legge seg i to spalter på store skjermer, og én spalte på mobil.</p>
+              <p class="pull">«En rolig rytme skaper rom for arbeid – også når verden er høylytt.»</p>
+              <p>Legg inn flere avsnitt og eventuelle lenker. Husk tydelig kontrast og underlinje på lenker.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" aria-label="Sidekolonne">
+          <div class="pad">
+            <h3>Innhold</h3>
+            <ul class="list">
+              <li><a href="#">Leder</a></li>
+              <li><a href="#">Forskning</a></li>
+              <li><a href="#">Praktiske tilpasninger</a></li>
+            </ul>
+            <h3 style="margin-top:16px">Neste nummer</h3>
+            <p>Arbeidsminne & struktur – april 2025.</p>
+          </div>
+        </aside>
+      </div>
+    </main>
   </div>
-</body></html>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container foot">
+      <small>© 2025 Variasjon · <a href="mailto:kontakt@example.org">kontakt@example.org</a></small>
+    </div>
+  </footer>
+</body>
+</html>
+
