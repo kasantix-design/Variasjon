@@ -5,18 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Administrasjon – Variasjon</title>
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Netlify Identity-widget -->
   <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <script>
-  if (window.netlifyIdentity) {
-    // Sørg for at brukeren sendes tilbake hit etter innlogging
-    window.netlifyIdentity.on("login", user => {
-      window.location.href = "/admin.html";
-    });
-    window.netlifyIdentity.on("logout", () => {
-      window.location.href = "/admin.html";
-    });
-  }
-</script>
+
   <style>
     body{font-family:system-ui,sans-serif;margin:2rem;background:#eef4ff;}
     .container{max-width:600px;margin:auto;background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.05);}
@@ -24,11 +16,14 @@
     button:hover{filter:brightness(.95)}
     .hidden{display:none}
     input,textarea{width:100%;margin-top:.4rem;padding:.5rem;border:1px solid #ccc;border-radius:6px}
+    #user-info{font-size:14px;color:#333;margin-bottom:1rem;}
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>Administrasjon</h1>
+    <div id="user-info" class="hidden"></div>
     <p>Logg inn for å lage videomøte og sende e-post.</p>
 
     <!-- LOGIN BUTTON -->
@@ -55,21 +50,56 @@
         <button type="submit">Send</button>
         <p id="mail-result"></p>
       </form>
+
+      <hr />
+      <button id="logout-btn">Logg ut</button>
     </div>
   </div>
 
+  <!-- Robust Netlify Identity-kontroll -->
   <script>
-    // Netlify Identity control
-    netlifyIdentity.on('login', user=>{
+  document.addEventListener("DOMContentLoaded", function(){
+    if (!window.netlifyIdentity) return;
+
+    // --- håndter invitasjonslenke ---
+    if (window.location.hash.includes("invite_token")) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          // Åpner widgeten slik at bruker får sette passord
+          window.netlifyIdentity.open();
+        }
+      });
+    }
+
+    // --- login/logout-redirect ---
+    window.netlifyIdentity.on("login", user => {
+      // vis hvem som er logget inn
+      const info = document.getElementById('user-info');
+      info.textContent = "Du er logget inn som " + (user.email || "ukjent bruker");
+      info.classList.remove('hidden');
+
       document.getElementById('login-area').classList.add('hidden');
       document.getElementById('admin-area').classList.remove('hidden');
-      netlifyIdentity.close();
-    });
-    netlifyIdentity.on('logout', ()=>{
-      document.getElementById('admin-area').classList.add('hidden');
-      document.getElementById('login-area').classList.remove('hidden');
+      window.netlifyIdentity.close();
+      window.location.hash = ""; // fjern token fra URL
     });
 
+    window.netlifyIdentity.on("logout", () => {
+      document.getElementById('user-info').classList.add('hidden');
+      document.getElementById('admin-area').classList.add('hidden');
+      document.getElementById('login-area').classList.remove('hidden');
+      window.location.href = "/admin.html";
+    });
+
+    // --- logg ut-knapp ---
+    document.getElementById('logout-btn')?.addEventListener('click', ()=>{
+      window.netlifyIdentity.logout();
+    });
+  });
+  </script>
+
+  <!-- Funksjonalitet for videomøte og e-post -->
+  <script>
     // Videomøteknapp
     document.getElementById('new-meeting')?.addEventListener('click', async ()=>{
       const res = await fetch('/.netlify/functions/lk-token?room=coaching',{
@@ -90,3 +120,4 @@
   </script>
 </body>
 </html>
+
