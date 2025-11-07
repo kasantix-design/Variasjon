@@ -6,7 +6,7 @@ function cors(json) {
     statusCode: 200,
     headers: {
       'content-type': 'application/json',
-      'access-control-allow-origin': 'https://kasantix-design.github.io',
+      'access-control-allow-origin': 'https://kasantix-design.github.io', // tillat din GitHub-side
       'access-control-allow-headers': 'content-type',
       'access-control-allow-methods': 'POST, OPTIONS'
     },
@@ -24,15 +24,25 @@ export async function handler(event) {
     return { statusCode: 500, body: 'Missing LiveKit env' };
   }
 
-  
-  const room = JSON.parse(event.body || '{}').room || 'coaching';
-  const room = (params.get('room') || 'coaching').replace(/[^a-zA-Z0-9_-]/g,'');
+  // ✅ Kombinert og trygg måte å lese "room" fra både body og query
+  const params = new URLSearchParams(event.queryStringParameters || {});
+  const bodyRoom = JSON.parse(event.body || '{}').room;
+  const rawRoom = params.get('room') || bodyRoom || 'coaching';
+  const room = String(rawRoom).replace(/[^a-zA-Z0-9_-]/g, '');
 
+  // Opprett LiveKit AccessToken
   const at = new AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET, {
-    identity: 'guest-' + Math.random().toString(36).slice(2,8),
-    ttl: 60 * 60
+    identity: 'guest-' + Math.random().toString(36).slice(2, 8),
+    ttl: 60 * 60 // 1 time
   });
-  at.addGrant({ room, roomJoin: true, canPublish: true, canSubscribe: true, canPublishData: true });
+
+  at.addGrant({
+    room,
+    roomJoin: true,
+    canPublish: true,
+    canSubscribe: true,
+    canPublishData: true
+  });
 
   const token = await at.toJwt();
   return cors({ url: LIVEKIT_URL, token, room });
