@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Adminpanel – Variasjon</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; background: #eef4ff; }
+    .container { max-width: 600px; margin: auto; background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,.05); }
+    button { margin-top: 1rem; padding: .6rem 1rem; font-weight: 600; border-radius: 8px; border: none; background: #3c74c9; color: #fff; cursor: pointer }
+    button:hover { filter: brightness(.95) }
+    input, textarea { width: 100%; margin-top: .5rem; padding: .5rem; border: 1px solid #ccc; border-radius: 6px }
+    #result { margin-top: 1rem; color: green; font-size: 0.9rem; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Adminpanel</h1>
+    <p>Velkommen! Her kan du starte videomøte eller sende e-post.</p>
+
+    <h2>Start videomøte</h2>
+    <button id="start-meeting">Start nytt møte</button>
+
+    <h2 style="margin-top:2rem;">Send e-post</h2>
+    <form id="email-form">
+      <label>Til:</label>
+      <input type="email" name="to" required>
+      <label>Emne:</label>
+      <input type="text" name="subject" required>
+      <label>Melding:</label>
+      <textarea name="message" rows="5" required></textarea>
+      <button type="submit">Send e-post</button>
+      <p id="result"></p>
+    </form>
+
+    <button style="margin-top:2rem;" onclick="netlifyIdentity.logout()">Logg ut</button>
+  </div>
+
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      netlifyIdentity.init();
+
+      // Videomøte
+      document.getElementById("start-meeting").addEventListener("click", async () => {
+        const res = await fetch("/.netlify/functions/lk-token", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ room: "coaching" })
+        });
+        const data = await res.json();
+        if (res.ok && data.token) {
+          const url = `/join.html?room=${data.room}&token=${data.token}&url=${encodeURIComponent(data.url)}`;
+          window.open(url, "_blank");
+        } else {
+          alert("Klarte ikke å starte møte.");
+        }
+      });
+
+      // E-post
+      document.getElementById("email-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const res = await fetch("/.netlify/functions/send-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            to: form.to.value,
+            subject: form.subject.value,
+            message: form.message.value
+          })
+        });
+        const out = await res.text();
+        document.getElementById("result").textContent = res.ok ? "E-post sendt!" : "Feil: " + out;
+      });
+    });
+  </script>
+</body>
+</html>
