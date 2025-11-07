@@ -3,53 +3,46 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Administrasjon – Variasjon</title>
+  <title>Logg inn – Variasjon</title>
   <link rel="stylesheet" href="style.css" />
   <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
   <style>
-    body{font-family:system-ui,sans-serif;margin:2rem;background:#eef4ff;}
-    .container{max-width:600px;margin:auto;background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.05);}
-    button{margin:.5rem 0;padding:.6rem 1rem;font-weight:600;border-radius:8px;border:none;background:#3c74c9;color:#fff;cursor:pointer}
-    button:hover{filter:brightness(.95)}
-    .hidden{display:none}
-    input,textarea{width:100%;margin-top:.4rem;padding:.5rem;border:1px solid #ccc;border-radius:6px}
-    #user-info{font-size:14px;color:#333;margin-bottom:1rem;}
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 2rem;
+      background: #eef4ff;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.05);
+      text-align: center;
+    }
+    button {
+      margin-top: 1rem;
+      padding: .6rem 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      border: none;
+      background: #3c74c9;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      filter: brightness(.95);
+    }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <h1>Administrasjon</h1>
-    <div id="user-info" class="hidden"></div>
-    <p>Logg inn for å lage videomøte og sende e-post.</p>
-
-    <div id="login-area">
-      <button onclick="netlifyIdentity.open()">Logg inn med Netlify Identity</button>
-    </div>
-
-    <div id="admin-area" class="hidden">
-      <h2>Videomøter</h2>
-      <button id="new-meeting">Opprett ny møte-lenke</button>
-      <p id="meeting-result"></p>
-
-      <hr />
-
-      <h2>Send e-post</h2>
-      <form id="mail-form">
-        <label>Til:</label>
-        <input type="email" id="to" required />
-        <label>Emne:</label>
-        <input type="text" id="subject" required />
-        <label>Melding:</label>
-        <textarea id="message" rows="5" required></textarea>
-        <button type="submit">Send</button>
-        <p id="mail-result"></p>
-      </form>
-
-      <hr />
-      <button id="logout-btn">Logg ut</button>
-    </div>
+    <h1>Logg inn</h1>
+    <p>Du må logge inn for å få tilgang til adminpanelet.</p>
+    <button onclick="netlifyIdentity.open()">Logg inn med Netlify Identity</button>
   </div>
 
   <script>
@@ -57,64 +50,15 @@
       if (!window.netlifyIdentity) return;
       window.netlifyIdentity.init();
 
-      if (window.location.hash.includes("invite_token")) {
-        window.netlifyIdentity.on("init", user => {
-          if (!user) window.netlifyIdentity.open();
-        });
-      }
-
       window.netlifyIdentity.on("login", user => {
-        const info = document.getElementById('user-info');
-        info.textContent = "Du er logget inn som " + (user.email || "ukjent bruker");
-        info.classList.remove('hidden');
-        document.getElementById('login-area').classList.add('hidden');
-        document.getElementById('admin-area').classList.remove('hidden');
         window.netlifyIdentity.close();
-        window.location.hash = "";
+        window.location.href = "/dashboard.html"; // 🔁 Sendes hit etter innlogging
       });
-
-      window.netlifyIdentity.on("logout", () => {
-        document.getElementById('user-info').classList.add('hidden');
-        document.getElementById('admin-area').classList.add('hidden');
-        document.getElementById('login-area').classList.remove('hidden');
-        window.location.href = "/admin.html";
-      });
-
-      document.getElementById('logout-btn')?.addEventListener('click', ()=>{
-        window.netlifyIdentity.logout();
-      });
-    });
-  </script>
-
-  <!-- ✅ Videomøte med POST + body -->
-  <script>
-    document.getElementById('new-meeting')?.addEventListener('click', async () => {
-      try {
-        const res = await fetch('/.netlify/functions/lk-token', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ room: 'coaching' })
-        });
-        const data = await res.json();
-        if (res.ok && data.token) {
-          const joinUrl = `${window.location.origin}/join.html?room=${data.room}&token=${data.token}&url=${encodeURIComponent(data.url)}`;
-          window.open(joinUrl, '_blank');
-        } else {
-          document.getElementById('meeting-result').textContent = 'Kunne ikke opprette møte. Prøv igjen.';
-        }
-      } catch (err) {
-        document.getElementById('meeting-result').textContent = 'Feil ved tilkobling.';
-      }
-    });
-
-    document.getElementById('mail-form')?.addEventListener('submit', e => {
-      e.preventDefault();
-      document.getElementById('mail-result').textContent =
-        'E-post-funksjon kobles til senere via Netlify Functions.';
     });
   </script>
 </body>
 </html>
+
 
 
 
