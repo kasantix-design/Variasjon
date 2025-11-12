@@ -4,37 +4,59 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- SEO: Tittel og beskrivelse -->
-  <title>Variasjon – Forskning forklart for nevrodivergente</title>
-  <meta name="description" content="Variasjon er et nettsted som gjør forskning om ADHD, autisme og nevrodivergens forståelig og tilgjengelig – uten fagprat." />
-  <meta name="keywords" content="nevrodivergens, ADHD, autisme, forskning ADHD, forskning autisme, forskning nevrodivergente, lett forklart forskning, sanseregulering, arbeidsminne" />
+  <!-- 🔍 SEO -->
+  <title>Forskning for nevrovarierte – Variasjon tidsskrift</title>
+  <meta name="description" content="Variasjon er et norsk tidsskrift og nettportal for nevrovarierte. Vi gjør forskning på ADHD, autisme og nevrodivergens forståelig og relevant i hverdagen." />
+  <meta name="keywords" content="nevrovariasjon, ADHD, autisme, forskning ADHD, forskning autisme, sanseregulering, arbeidsminne, nevrodivergente, tidsskrift" />
   <meta name="robots" content="index, follow" />
 
-  <!-- Open Graph (for sosiale medier) -->
-  <meta property="og:title" content="Variasjon – Forskning forklart for nevrodivergente" />
-  <meta property="og:description" content="Et nettsted for deg som vil forstå forskning om ADHD, autisme og nevrodivergens – uten tunge fagtermer." />
+  <!-- 🧭 Open Graph -->
+  <meta property="og:title" content="Forskning for nevrovarierte – Variasjon tidsskrift" />
+  <meta property="og:description" content="Et norsk tidsskrift for deg som vil forstå forskning på ADHD, autisme og nevrodivergens – uten tunge fagtermer." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://kasantix-design.github.io/Variasjon/index.html" />
   <meta property="og:image" content="https://kasantix-design.github.io/Variasjon/assets/reidun.jpg" />
 
-  <!-- Twitter -->
+  <!-- 🐦 Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Variasjon – Forskning forklart for nevrodivergente" />
+  <meta name="twitter:title" content="Forskning for nevrovarierte – Variasjon tidsskrift" />
   <meta name="twitter:description" content="Vi gjør forskning forståelig for alle med ADHD, autisme og andre nevrovariasjoner." />
   <meta name="twitter:image" content="https://kasantix-design.github.io/Variasjon/assets/reidun.jpg" />
 
-  <!-- Favicon -->
-  <link rel="icon" href="/Variasjon/assets/favicon.ico" />
+  <!-- 🧩 Structured data (schema.org) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Magazine",
+    "name": "Variasjon",
+    "description": "Et norsk tidsskrift for nevrovarierte som gjør forskning på ADHD, autisme og sanseregulering tilgjengelig og forståelig.",
+    "url": "https://kasantix-design.github.io/Variasjon/",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Variasjon",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://kasantix-design.github.io/Variasjon/assets/favicon.ico"
+      }
+    },
+    "inLanguage": "no"
+  }
+  </script>
 
-  <!-- Stil -->
-  <link rel="stylesheet" href="style.css" />
+  <!-- Favicon og stil -->
+  <link rel="icon" href="/Variasjon/assets/favicon.ico" />
+  <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="style.css"></noscript>
 </head>
 
 <body>
+  <!-- 🧭 Skjult SEO-hovedoverskrift -->
+  <h1 class="visually-hidden">Variasjon – forskning og formidling for nevrovarierte</h1>
+
   <header class="site-header">
     <div class="container mast" role="banner">
-      <h1 class="logo">VARIASJON</h1>
-      <p class="subtitle" aria-label="Undertittel stablet over hverandre">
+      <p class="logo">VARIASJON</p>
+      <p class="subtitle">
         <span class="line">Tidsskrift</span>
         <span class="line">for</span>
         <span class="line">nevrovarierte</span>
@@ -52,6 +74,13 @@
     </nav>
     <div class="accent-bar" aria-hidden="true"></div>
   </header>
+
+  <!-- 🔹 Brødsmulesti -->
+  <nav class="breadcrumbs" aria-label="Brødsmulesti">
+    <div class="container">
+      <a href="index.html">Hjem</a> › <span>Forsiden</span>
+    </div>
+  </nav>
 
   <div class="page-wrap">
     <main class="container" role="main">
@@ -73,15 +102,26 @@
           <div class="pad">
             <h3>Innhold</h3>
             <ul class="list">
-              <li><a href="#">Leder</a></li>
-              <li><a href="#">Forskning</a></li>
-              <li><a href="#">Praktiske tilpasninger</a></li>
+              <li><a href="leder.html">Leder: Sansene som arbeidsverktøy</a></li>
+              <li><a href="forskning.html">Forskning på nevrovariasjon og arbeidsliv</a></li>
+              <li><a href="tilpasning.html">Praktiske tilpasninger på arbeidsplassen</a></li>
             </ul>
+
             <h3 style="margin-top:16px">Neste nummer</h3>
             <p>Arbeidsminne & struktur – april 2025.</p>
           </div>
         </aside>
       </div>
+
+      <!-- 🔹 Relaterte temaer -->
+      <section class="related">
+        <h3>Les mer om</h3>
+        <ul class="list">
+          <li><a href="arbeidsminne.html">Arbeidsminne og struktur</a></li>
+          <li><a href="sanseregulering.html">Sanseregulering i hverdagen</a></li>
+          <li><a href="autisme.html">Autisme og arbeidsliv</a></li>
+        </ul>
+      </section>
     </main>
   </div>
 
@@ -92,5 +132,6 @@
   </footer>
 </body>
 </html>
+
 
 
